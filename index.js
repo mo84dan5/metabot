@@ -165,6 +165,7 @@ const main = async () => {
   document.body.appendChild(renderer.domElement)
 
   // gltfモデルをsceneに追加
+  console.log(model)
   scene.add(model)
 
   // 再生開始 (カメラ映像を投影)
