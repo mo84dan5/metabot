@@ -204,9 +204,9 @@ const main = async () => {
     positionList.forEach((pos) => {
       const pointLight = new THREE.PointLight(0xffffff, 1, 10)
       pointLight.position.set(...pos)
-      scene.add(pointLight, 5)
+      scene.add(pointLight)
     })
-    setLight(model.scene)
+    setLight(model.scene, 5)
   }
 
   const clock = new THREE.Clock()
