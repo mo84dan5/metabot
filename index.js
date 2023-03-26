@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.5'
+const _version = 'index.js: v1.6'
 console.log(_version)
 
 // モーダル要素を取得
@@ -184,9 +184,8 @@ const main = async () => {
   console.log(model)
   const mixer = new THREE.AnimationMixer(model.scene)
   console.log(model.scene.animations[0])
-  const animation = model.scene.animations[0]
-  // const action = mixer.clipAction(animation)
-  // action.play()
+  const action = mixer.clipAction(model.scene.animations)
+  action.play()
   scene.add(model.scene)
 
   const clock = new THREE.Clock()
