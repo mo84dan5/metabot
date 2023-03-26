@@ -181,7 +181,7 @@ const main = async () => {
 
   // gltfモデルをsceneに追加
   console.log(model)
-  scene.add(model)
+  scene.add(model.scene)
 
   // 再生開始 (カメラ映像を投影)
   function loop() {
