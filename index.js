@@ -22,7 +22,10 @@ modal.style.display = 'block'
 // OKボタンがクリックされたときの処理
 okButton.onclick = function () {
   modal.style.display = 'none'
-  main().catch((e) => console.error(e))
+  main().catch((e) => {
+    modalTextElement.innerHTML = e
+    modal.style.display = 'block'
+  })
 }
 
 // 閉じるボタンがクリックされたときの処理
