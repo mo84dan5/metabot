@@ -1,4 +1,4 @@
-import { playGLTFAnimation } from './lib/playGltfAnimatinon'
+// import { playGLTFAnimation } from './lib/playGltfAnimation.js'
 
 const _version = 'index.js: v1.3'
 console.log(_version)
