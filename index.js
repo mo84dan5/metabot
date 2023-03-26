@@ -145,7 +145,7 @@ const main = async () => {
   scene.add(light)
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
   directionalLight.position.set(0, 3, 2)
-  directionalLight.target(0, 0, 0)
+  // directionalLight.target(0, 0, 0)
   scene.add(directionalLight)
   const pointLight = new THREE.PointLight(0xffffff, 1, 10)
   pointLight.position.set(0, 3, 2)
