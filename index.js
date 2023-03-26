@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.7'
+const _version = 'index.js: v1.8'
 console.log(_version)
 
 // モーダル要素を取得
@@ -183,6 +183,8 @@ const main = async () => {
   // gltfモデルをsceneに追加
   console.log(model)
   const mixer = new THREE.AnimationMixer(model.scene)
+  console.log(model.scene.animations)
+  console.log(model.scene.animations.keys)
   const action = mixer.clipAction(model.scene.animations)
   action.play()
   scene.add(model.scene)
