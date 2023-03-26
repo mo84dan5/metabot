@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.15'
+const _version = 'index.js: v1.16'
 console.log(_version)
 
 // モーダル要素を取得
@@ -124,7 +124,7 @@ const main = async () => {
   }
 
   const contentsPromises = []
-  const modelPromise = loadGLTFModel('./assets/sample2.glb')
+  const modelPromise = loadGLTFModel('./assets/sample3.glb')
   contentsPromises.push(modelPromise)
   Promise.all(contentsPromises)
   const model = await modelPromise
