@@ -10,6 +10,11 @@ const okButton = document.querySelector('.ok-button')
 // 閉じるボタン要素を取得
 const closeButton = document.querySelector('.close')
 
+const modalTextElement = document.getElementById('modal-text')
+const baseText =
+  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。'
+modalTextElement.innerHTML = baseText + '\n' + _version
+
 // ページ読み込み時にモーダルを表示
 
 modal.style.display = 'block'
