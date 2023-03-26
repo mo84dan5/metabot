@@ -143,13 +143,7 @@ const main = async () => {
   scene.add(camera)
   const light = new THREE.HemisphereLight()
   scene.add(light)
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-  directionalLight.position.set(0, 3, 2)
-  // directionalLight.target(0, 0, 0)
-  scene.add(directionalLight)
-  const pointLight = new THREE.PointLight(0xffffff, 1, 10)
-  pointLight.position.set(0, 3, 2)
-  scene.add(pointLight)
+
   //  ThreeJSのレンダラーを作成
   const renderer = new THREE.WebGLRenderer({
     preserveDrawingBuffer: true,
@@ -194,6 +188,26 @@ const main = async () => {
   const action = mixer.clipAction(model.animations[0])
   action.play()
   scene.add(model.scene)
+
+  const pointLight = new THREE.PointLight(0xffffff, 1, 10)
+  pointLight.position.set(0, 3, 2)
+  scene.add(pointLight)
+  const setLight = (object, distance) => {
+    const positionList = [
+      [object.position.x + distance, object.position.y, object.position.z],
+      [object.position.x, object.position.y + distance, object.position.z],
+      [object.position.x, object.position.y, object.position.z + distance],
+      [object.position.x - distance, object.position.y, object.position.z],
+      [object.position.x, object.position.y - distance, object.position.z],
+      [object.position.x, object.position.y, object.position.z - distance],
+    ]
+    positionList.forEach((pos) => {
+      const pointLight = new THREE.PointLight(0xffffff, 1, 10)
+      pointLight.position.set(...pos)
+      scene.add(pointLight)
+    })
+    setLight(model.scene)
+  }
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
