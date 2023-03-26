@@ -1,7 +1,3 @@
-// import { playGLTFAnimation } from './lib/playGltfAnimation.js'
-
-import { playGLTFAnimation } from './lib/playGltfAnimation'
-
 const _version = 'index.js: v1.3'
 console.log(_version)
 
@@ -186,8 +182,10 @@ const main = async () => {
 
   // gltfモデルをsceneに追加
   console.log(model)
-  mixer = playGLTFAnimation(model)
-  console.log(mixer)
+  const mixer = new THREE.AnimationMixer(model.scene)
+  const animation = model.scene.animations[0]
+  const action = mixer.clipAction(animation)
+  action.play()
   scene.add(model.scene)
 
   const clock = new THREE.Clock()
