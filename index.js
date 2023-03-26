@@ -13,6 +13,8 @@ const apiKeyModal = document.getElementById('apiModal')
 // submitボタン要素を取得
 const apiKeySubmitButton = document.querySelector('.submit')
 
+const inputApiKey = document.getElementById('inputApiKey').value
+
 // 閉じるボタン要素を取得
 const closeButton = document.querySelector('.close')
 
@@ -223,6 +225,13 @@ const main = async () => {
 
   // API keyの取得モーダル
   apiKeyModal.style.display = 'block'
+
+  const mc = new Hammer(myElement)
+
+  // listen to events...
+  mc.on('panleft panright tap press', function (ev) {
+    myElement.textContent = ev.type + ' gesture detected.'
+  })
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
