@@ -14,6 +14,7 @@
     <script src="//cdn.rawgit.com/mrdoob/three.js/r123/examples/js/loaders/GLTFLoader.js"></script>
     <script src="//cdn.jsdelivr.net/npm/three@0.133.1/examples/js/controls/DeviceOrientationControls.js"></script>
     <script src="//cdn.jsdelivr.net/npm/three@0.133.1/examples/js/controls/OrbitControls.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <script src="index.js" defer></script>
   </head>
   <body>
@@ -22,7 +23,17 @@
         <span class="close">&times;</span>
         <p id="modal-text"></p>
         <div class="button-container">
-          <button class="ok-button">OK</button>
+          <button class="ok ok-button">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="apiModal" class="modal">
+      <div class="modal-content">
+        <p>APIキーを入力してください</p>
+        <input type="text" id="inputText" />
+        <div class="button-container">
+          <button class="submit ok-button">Submit</button>
         </div>
       </div>
     </div>

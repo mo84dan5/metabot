@@ -5,7 +5,13 @@ console.log(_version)
 const modal = document.getElementById('myModal')
 
 // OKボタン要素を取得
-const okButton = document.querySelector('.ok-button')
+const okButton = document.querySelector('.ok')
+
+// モーダル要素を取得
+const apiKeyModal = document.getElementById('myModal')
+
+// OKボタン要素を取得
+const apiKeySubmitButton = document.querySelector('.submit')
 
 // 閉じるボタン要素を取得
 const closeButton = document.querySelector('.close')
