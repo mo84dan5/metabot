@@ -208,7 +208,7 @@ const main = async () => {
       scene.add(pointLight)
     })
   }
-  setLight(model.scene, 5)
+  setLight(model.scene, 10)
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
