@@ -1,5 +1,7 @@
 // import { playGLTFAnimation } from './lib/playGltfAnimation.js'
 
+import { playGLTFAnimation } from './lib/playGltfAnimation'
+
 const _version = 'index.js: v1.3'
 console.log(_version)
 
@@ -183,11 +185,17 @@ const main = async () => {
 
   // gltfモデルをsceneに追加
   console.log(model)
+  mixer = playGLTFAnimation(model)
   scene.add(model.scene)
 
+  const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
   function loop() {
     requestAnimationFrame(loop)
+    if (mixer) {
+      const delta = clock.getDelta()
+      mixer.update(delta)
+    }
     controls.update()
     renderer.render(scene, camera)
   }
