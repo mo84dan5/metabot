@@ -23,6 +23,7 @@ modal.style.display = 'block'
 okButton.onclick = function () {
   modal.style.display = 'none'
   main().catch((e) => {
+    console.log(e)
     modalTextElement.innerHTML = e
     modal.style.display = 'block'
   })
@@ -126,6 +127,7 @@ const main = async () => {
   const modelPromise = loadGLTFModel('./assets/sample2.glb')
   contentsPromises.push(modelPromise)
   Promise.all(contentsPromises)
+  const model = await modelPromise
 
   // alias
   const [w, h] = [window.innerWidth, window.innerHeight]
@@ -156,4 +158,14 @@ const main = async () => {
     controls = new THREE.OrbitControls(camera, renderer.domElement)
   }
   controls.connect()
+
+  document.body.appendChild(renderer.domElement)
+
+  // 再生開始 (カメラ映像を投影)
+  function loop() {
+    requestAnimationFrame(loop)
+    controls.update()
+    renderer.render(scene, camera)
+  }
+  loop()
 }
