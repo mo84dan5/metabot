@@ -1,6 +1,6 @@
 import { playGLTFAnimation } from './lib/playGltfAnimatinon'
 
-const _version = 'index.js: v1.2'
+const _version = 'index.js: v1.3'
 console.log(_version)
 
 // モーダル要素を取得
