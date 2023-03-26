@@ -148,6 +148,7 @@ const main = async () => {
   const light = new THREE.HemisphereLight()
   scene.add(light)
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+  directionalLight.position.set(0, 0, -1)
   scene.add(directionalLight)
   //  ThreeJSのレンダラーを作成
   const renderer = new THREE.WebGLRenderer({
@@ -186,6 +187,7 @@ const main = async () => {
   // gltfモデルをsceneに追加
   console.log(model)
   mixer = playGLTFAnimation(model)
+  console.log(mixer)
   scene.add(model.scene)
 
   const clock = new THREE.Clock()
