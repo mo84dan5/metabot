@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.4'
+const _version = 'index.js: v1.5'
 console.log(_version)
 
 // モーダル要素を取得
@@ -143,7 +143,7 @@ const main = async () => {
   scene.add(camera)
   const light = new THREE.HemisphereLight()
   scene.add(light)
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
   directionalLight.position.set(0, 0, 1)
   scene.add(directionalLight)
   //  ThreeJSのレンダラーを作成
