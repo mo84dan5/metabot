@@ -185,7 +185,7 @@ const main = async () => {
 
   // gltfモデルをsceneに追加
   console.log(model)
-  model.scene.setSize(12, 12, 12)
+  model.scene.scale.set(12, 12, 12)
   const mixer = new THREE.AnimationMixer(model.scene)
   const action = mixer.clipAction(model.animations[0])
   action.play()
