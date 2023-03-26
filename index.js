@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.9'
+const _version = 'index.js: v1.10'
 console.log(_version)
 
 // モーダル要素を取得
@@ -139,7 +139,7 @@ const main = async () => {
     scene.background = webcamTexture
   }
   const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000)
-  camera.position.z = 2
+  camera.position.set(0, 1.5, 2)
   scene.add(camera)
   const light = new THREE.HemisphereLight()
   scene.add(light)
@@ -147,7 +147,7 @@ const main = async () => {
   directionalLight.position.set(0, 0, 1)
   scene.add(directionalLight)
   const pointLight = new THREE.PointLight(0xffffff, 1, 10)
-  pointLight.position.set(0, 0, 2)
+  pointLight.position.set(0, 1.5, 2)
   scene.add(pointLight)
   //  ThreeJSのレンダラーを作成
   const renderer = new THREE.WebGLRenderer({
