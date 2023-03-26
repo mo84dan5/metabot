@@ -1,3 +1,6 @@
+const _version = 'index.js: v1.0'
+console.log(_version)
+
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
 
