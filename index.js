@@ -112,15 +112,45 @@ const main = async () => {
   console.log('start app')
   // カメラ映像を投影するテクスチャを作成
   let video
-  let webcam_texture
+  let webcamTexture
   if (isMobile()) {
     await requestPermission()
     video = document.createElement('video')
-    webcam_texture = await getWebcamTexture(video)
+    webcamTexture = await getWebcamTexture(video)
   }
 
   const contentsPromises = []
   const modelPromise = loadGLTFModel('./assets/sample2.glb')
   contentsPromises.push(modelPromise)
   Promise.all(contentsPromises)
+
+  // alias
+  const [w, h] = [window.innerWidth, window.innerHeight]
+
+  // ThreeJSのシーンを作成
+  const scene = new THREE.Scene()
+  if (webcamTexture) {
+    // シーンの背景にカメラの動画テクスチャを貼り付ける
+    scene.background = webcamTexture
+  }
+  const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000)
+  scene.add(camera)
+  const light = new THREE.HemisphereLight()
+  scene.add(light)
+  //  ThreeJSのレンダラーを作成
+  const renderer = new THREE.WebGLRenderer({
+    preserveDrawingBuffer: true,
+    antialias: true,
+  })
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(w, h)
+
+  // カメラのコントロールをジャイロセンターから取得した値と連携: THREE.DeviceOrientationControls
+  let controls
+  if (isMobile) {
+    controls = new THREE.DeviceOrientationControls(camera, true)
+  } else {
+    controls = new THREE.OrbitControls(camera, renderer.domElement)
+  }
+  controls.connect()
 }
