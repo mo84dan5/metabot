@@ -76,6 +76,22 @@ async function getWebcamTexture(video) {
   return webcam_texture
 }
 
+// プロミスを返すGLTFLoader関数
+function loadGLTFModel(url) {
+  // GLTFLoaderオブジェクトを作成
+  const loader = new THREE.GLTFLoader()
+
+  // Promiseを使用してモデルを読み込む
+  return new Promise((resolve, reject) => {
+    loader.load(
+      url,
+      (gltf) => resolve(gltf), // ロード成功時の処理
+      undefined, // 進捗イベント用のコールバックは使用しない
+      (error) => reject(error) // ロード失敗時の処理
+    )
+  })
+}
+
 const isMobile = () => {
   // ユーザーエージェントを取得
   var userAgent = navigator.userAgent || navigator.vendor || window.opera
@@ -94,7 +110,17 @@ const isMobile = () => {
 
 const main = async () => {
   console.log('start app')
+  // カメラ映像を投影するテクスチャを作成
+  let video
+  let webcam_texture
   if (isMobile()) {
     await requestPermission()
+    video = document.createElement('video')
+    webcam_texture = await getWebcamTexture(video)
   }
+
+  const contentsPromises = []
+  const modelPromise = loadGLTFModel('./assets/sample2.glb')
+  contentsPromises.push(modelPromise)
+  Promise.all(contentsPromises)
 }
