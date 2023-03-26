@@ -8,9 +8,9 @@ const modal = document.getElementById('myModal')
 const okButton = document.querySelector('.ok')
 
 // モーダル要素を取得
-const apiKeyModal = document.getElementById('myModal')
+const apiKeyModal = document.getElementById('apiModal')
 
-// OKボタン要素を取得
+// submitボタン要素を取得
 const apiKeySubmitButton = document.querySelector('.submit')
 
 // 閉じるボタン要素を取得
@@ -33,6 +33,11 @@ okButton.onclick = function () {
     modalTextElement.innerHTML = e
     modal.style.display = 'block'
   })
+}
+
+// OKボタンがクリックされたときの処理
+apiKeySubmitButton.onclick = function () {
+  apiKeyModal.style.display = 'none'
 }
 
 // 閉じるボタンがクリックされたときの処理
@@ -215,6 +220,9 @@ const main = async () => {
     })
   }
   setLight(model.scene, 10)
+
+  // API keyの取得モーダル
+  apiKeyModal.style.display = 'block'
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
