@@ -203,6 +203,7 @@ const main = async () => {
     ]
     positionList.forEach((pos) => {
       const pointLight = new THREE.PointLight(0xffffff, 1, 10)
+      console.log(...pos)
       pointLight.position.set(...pos)
       scene.add(pointLight)
     })
