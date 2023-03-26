@@ -144,7 +144,7 @@ const main = async () => {
   const light = new THREE.HemisphereLight()
   scene.add(light)
   const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
-  directionalLight.position.set(0, 0, -1)
+  directionalLight.position.set(0, 0, 1)
   scene.add(directionalLight)
   //  ThreeJSのレンダラーを作成
   const renderer = new THREE.WebGLRenderer({
