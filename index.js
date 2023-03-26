@@ -152,6 +152,21 @@ const main = async () => {
   })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(w, h)
+  // レンダラーのdomElementにスタイルを適用
+  renderer.domElement.style.position = 'absolute'
+  renderer.domElement.style.top = 0
+  renderer.domElement.style.left = 0
+
+  // <body>にスタイルを適用
+  document.body.style.margin = 0
+  document.body.style.overflow = 'hidden'
+
+  window.addEventListener('resize', () => {
+    // ウィンドウサイズが変更されたときにレンダラーのサイズを更新
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+  })
 
   // カメラのコントロールをジャイロセンターから取得した値と連携: THREE.DeviceOrientationControls
   let controls
