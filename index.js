@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.13'
+const _version = 'index.js: v1.14'
 console.log(_version)
 
 // モーダル要素を取得
