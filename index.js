@@ -14,6 +14,7 @@ modal.style.display = 'block'
 // OKボタンがクリックされたときの処理
 okButton.onclick = function () {
   modal.style.display = 'none'
+  main().catch((e) => console.error(e))
 }
 
 // 閉じるボタンがクリックされたときの処理
@@ -67,5 +68,6 @@ async function getWebcamTexture(video) {
   return webcam_texture
 }
 
-function main() {}
-main().catch((e) => console.error(e))
+function main() {
+  console.log('start app')
+}
