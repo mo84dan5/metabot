@@ -146,6 +146,9 @@ const main = async () => {
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
   directionalLight.position.set(0, 0, 1)
   scene.add(directionalLight)
+  const pointLight = new THREE.PointLight(0xffffff, 1, 10)
+  pointLight.position.set(0, 0, 2)
+  scene.add(pointLight)
   //  ThreeJSのレンダラーを作成
   const renderer = new THREE.WebGLRenderer({
     preserveDrawingBuffer: true,
@@ -182,6 +185,7 @@ const main = async () => {
 
   // gltfモデルをsceneに追加
   console.log(model)
+  model.scene.setSize(12, 12, 12)
   const mixer = new THREE.AnimationMixer(model.scene)
   const action = mixer.clipAction(model.animations[0])
   action.play()
