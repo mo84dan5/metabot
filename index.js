@@ -71,6 +71,25 @@ async function getWebcamTexture(video) {
   return webcam_texture
 }
 
-function main() {
+const isMobile = () => {
+  // ユーザーエージェントを取得
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera
+
+  // モバイルデバイスかどうかを判定
+  var isMobile = /Mobi|Android/i.test(userAgent)
+
+  if (isMobile) {
+    // モバイルデバイスからアクセスしている場合の処理
+    return true
+  } else {
+    // PCからアクセスしている場合の処理
+    return false
+  }
+}
+
+const main = async () => {
   console.log('start app')
+  if (isMobile()) {
+    await requestPermission()
+  }
 }
