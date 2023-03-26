@@ -1,3 +1,5 @@
+import { playGLTFAnimation } from './lib/playGltfAnimatinon'
+
 const _version = 'index.js: v1.2'
 console.log(_version)
 
@@ -139,6 +141,7 @@ const main = async () => {
     scene.background = webcamTexture
   }
   const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000)
+  camera.position.z = 2
   scene.add(camera)
   const light = new THREE.HemisphereLight()
   scene.add(light)
@@ -160,6 +163,9 @@ const main = async () => {
   controls.connect()
 
   document.body.appendChild(renderer.domElement)
+
+  // gltfモデルをsceneに追加
+  scene.add(model)
 
   // 再生開始 (カメラ映像を投影)
   function loop() {
