@@ -182,7 +182,7 @@ const main = async () => {
 
   // カメラのコントロールをジャイロセンターから取得した値と連携: THREE.DeviceOrientationControls
   let controls
-  if (isMobile) {
+  if (isMobile()) {
     controls = new THREE.DeviceOrientationControls(camera, true)
   } else {
     controls = new THREE.OrbitControls(camera, renderer.domElement)
