@@ -212,14 +212,28 @@ const main = async () => {
   pointLight.position.set(0, 3, 2)
   scene.add(pointLight)
   const setLight = (object, distance) => {
-    const positionList = [
-      [object.position.x + distance, object.position.y, object.position.z],
-      [object.position.x, object.position.y + distance, object.position.z],
-      [object.position.x, object.position.y, object.position.z + distance],
-      [object.position.x - distance, object.position.y, object.position.z],
-      [object.position.x, object.position.y - distance, object.position.z],
-      [object.position.x, object.position.y, object.position.z - distance],
-    ]
+    function generateCombinations(a, b, c, d) {
+      const operations = [(x) => x + d, (x) => x - d, (x) => x]
+      const combinations = []
+
+      operations.forEach((operationA) => {
+        operations.forEach((operationB) => {
+          operations.forEach((operationC) => {
+            combinations.push([operationA(a), operationB(b), operationC(c)])
+          })
+        })
+      })
+
+      return combinations
+    }
+
+    const a = object.position.x
+    const b = object.position.y
+    const c = object.position.z
+    const d = distance
+
+    const positionList = generateCombinations(a, b, c, d)
+
     positionList.forEach((pos) => {
       const pointLight = new THREE.PointLight(0xffffff, 1, 10)
       console.log(...pos)
