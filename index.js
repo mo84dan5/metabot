@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.17'
+const _version = 'index.js: v1.18'
 console.log(_version)
 
 // モーダル要素を取得
@@ -227,7 +227,7 @@ const main = async () => {
   apiKeyModal.style.display = 'block'
 
   // Hammerインスタンスの作成
-  const hammer = new Hammer(myButton)
+  const hammer = new Hammer(document.body)
 
   // pressイベントのリッスン
   hammer.on('press', () => {
