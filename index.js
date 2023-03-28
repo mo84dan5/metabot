@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.21'
+const _version = 'index.js: v1.22'
 console.log(_version)
 
 // モーダル要素を取得
@@ -250,27 +250,61 @@ const main = async () => {
   const hammer = new Hammer(document.body)
 
   let timeoutId
+  const stateList = ['wait', 'recording', 'processing', 'reply']
+  let processState = stateList[0]
 
-  function processA() {
-    console.log('処理A')
-    // ここに処理Aを記述してください
-  }
+  function executeActionByState(state) {
+    switch (state) {
+      case 'wait':
+        console.log('レコーディング開始')
+        processState = stateList[1]
+        // ここにState Aの処理を記述してください
+        break
 
-  function processB() {
-    console.log('処理B')
-    // ここに処理Bを記述してください
+      case 'recording':
+        console.log('レコーディング終了')
+        processState = stateList[2]
+        executeActionByState(processState)
+        // ここにState Bの処理を記述してください
+        break
+
+      case 'processing':
+        console.log('ChatGPT中')
+        processState = stateList[3]
+        executeActionByState(processState)
+        // ここにState Cの処理を記述してください
+        break
+
+      case 'reply':
+        console.log('返答取得')
+        modalTextElement.innerHTML = 'リプライ文'
+        modal.style.display = 'block'
+        processState = stateList[0]
+        // ここにState Cの処理を記述してください
+        break
+
+      default:
+        console.log('未定義の状態です')
+        break
+    }
   }
 
   hammer.on('press', () => {
-    processA()
+    if (processState === 'wait') {
+      executeActionByState(processState)
+    }
     timeoutId = setTimeout(() => {
-      processB()
+      if (processState === 'recording') {
+        executeActionByState(processState)
+      }
     }, 5000)
   })
 
   hammer.on('pressup', () => {
     clearTimeout(timeoutId)
-    processB()
+    if (processState === 'recording') {
+      executeActionByState(processState)
+    }
   })
 
   const clock = new THREE.Clock()
