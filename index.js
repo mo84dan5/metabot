@@ -39,7 +39,6 @@ okButton.onclick = function () {
       modal.style.display = 'block'
     })
   } else {
-    odalTextElement.innerHTML = e
     modal.style.display = 'block'
   }
 }
