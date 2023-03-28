@@ -13,7 +13,7 @@ const apiKeyModal = document.getElementById('apiModal')
 // submitボタン要素を取得
 const apiKeySubmitButton = document.querySelector('.submit')
 
-const inputApiKey = document.getElementById('inputApiKey').value
+const inputApiKey = document.getElementById('inputApiKey')
 
 // 閉じるボタン要素を取得
 const closeButton = document.querySelector('.close')
@@ -226,11 +226,19 @@ const main = async () => {
   // API keyの取得モーダル
   apiKeyModal.style.display = 'block'
 
-  const mc = new Hammer(myElement)
+  // Hammerインスタンスの作成
+  const hammer = new Hammer(myButton)
 
-  // listen to events...
-  mc.on('panleft panright tap press', function (ev) {
-    myElement.textContent = ev.type + ' gesture detected.'
+  // pressイベントのリッスン
+  hammer.on('press', () => {
+    console.log('Button pressed')
+    // ここにpressした際に実行される処理を記述してください
+  })
+
+  // pressupイベントのリッスン
+  hammer.on('pressup', () => {
+    console.log('Button released')
+    // ここにpress upした際に実行される処理を記述してください
   })
 
   const clock = new THREE.Clock()
