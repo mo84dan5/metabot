@@ -236,7 +236,6 @@ const main = async () => {
 
     positionList.forEach((pos) => {
       const pointLight = new THREE.PointLight(0xffffff, 1, 10)
-      console.log(...pos)
       pointLight.position.set(...pos)
       scene.add(pointLight)
     })
@@ -258,21 +257,18 @@ const main = async () => {
       case 'wait':
         console.log('レコーディング開始')
         processState = stateList[1]
-        // ここにState Aの処理を記述してください
         break
 
       case 'recording':
         console.log('レコーディング終了')
         processState = stateList[2]
         executeActionByState(processState)
-        // ここにState Bの処理を記述してください
         break
 
       case 'processing':
         console.log('ChatGPT中')
         processState = stateList[3]
         executeActionByState(processState)
-        // ここにState Cの処理を記述してください
         break
 
       case 'reply':
@@ -280,7 +276,6 @@ const main = async () => {
         modalTextElement.innerHTML = 'リプライ文'
         modal.style.display = 'block'
         processState = stateList[0]
-        // ここにState Cの処理を記述してください
         break
 
       default:
