@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.19'
+const _version = 'index.js: v1.20'
 console.log(_version)
 
 // モーダル要素を取得
@@ -28,13 +28,20 @@ modalTextElement.innerHTML = baseText + '\n' + _version
 modal.style.display = 'block'
 
 // OKボタンがクリックされたときの処理
+let okButtonOnce = true
 okButton.onclick = function () {
   modal.style.display = 'none'
-  main().catch((e) => {
-    console.log(e)
-    modalTextElement.innerHTML = e
+  if (okButtonOnce) {
+    okButtonOnce = false
+    main().catch((e) => {
+      console.log(e)
+      modalTextElement.innerHTML = e
+      modal.style.display = 'block'
+    })
+  } else {
+    odalTextElement.innerHTML = e
     modal.style.display = 'block'
-  })
+  }
 }
 
 // OKボタンがクリックされたときの処理
