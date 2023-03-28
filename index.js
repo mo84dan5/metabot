@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.18'
+const _version = 'index.js: v1.19'
 console.log(_version)
 
 // モーダル要素を取得
@@ -229,16 +229,28 @@ const main = async () => {
   // Hammerインスタンスの作成
   const hammer = new Hammer(document.body)
 
-  // pressイベントのリッスン
+  let timeoutId
+
+  function processA() {
+    console.log('処理A')
+    // ここに処理Aを記述してください
+  }
+
+  function processB() {
+    console.log('処理B')
+    // ここに処理Bを記述してください
+  }
+
   hammer.on('press', () => {
-    console.log('Button pressed')
-    // ここにpressした際に実行される処理を記述してください
+    processA()
+    timeoutId = setTimeout(() => {
+      processB()
+    }, 5000)
   })
 
-  // pressupイベントのリッスン
   hammer.on('pressup', () => {
-    console.log('Button released')
-    // ここにpress upした際に実行される処理を記述してください
+    clearTimeout(timeoutId)
+    processB()
   })
 
   const clock = new THREE.Clock()
