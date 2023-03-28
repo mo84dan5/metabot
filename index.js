@@ -39,7 +39,7 @@ okButton.onclick = function () {
       modal.style.display = 'block'
     })
   } else {
-    modal.style.display = 'block'
+    modal.style.display = 'none'
   }
 }
 
