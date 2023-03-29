@@ -1,6 +1,8 @@
 const _version = 'index.js: v1.22'
 console.log(_version)
 
+import { waitAndReturn } from './lib/waitFunction'
+
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
 
@@ -190,10 +192,10 @@ const main = async () => {
   let controls
   if (isMobile()) {
     controls = new THREE.DeviceOrientationControls(camera, true)
+    controls.connect()
   } else {
     controls = new THREE.OrbitControls(camera, renderer.domElement)
   }
-  controls.connect()
 
   document.body.appendChild(renderer.domElement)
 
@@ -267,6 +269,7 @@ const main = async () => {
 
       case 'processing':
         console.log('ChatGPT中')
+        waitAndReturn()
         processState = stateList[3]
         executeActionByState(processState)
         break
