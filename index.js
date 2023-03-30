@@ -269,8 +269,9 @@ const main = async () => {
 
       case 'recording':
         console.log('レコーディング終了')
-        const mp3 = await recorder.stopRecording()
-        createPlayButton(mp3)
+        const mp3Data = await recorder.stopRecording()
+        const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
+        createPlayButton(mp3Blob)
         processState = stateList[2]
         executeActionByState(processState)
         break
