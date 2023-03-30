@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.27'
+const _version = 'index.js: v1.28'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -272,6 +272,7 @@ const main = async () => {
         const mp3Data = await recorder.stopRecording()
         const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
         createPlayButton(mp3Blob)
+        console.log(mp3Blob)
         processState = stateList[2]
         executeActionByState(processState)
         break
