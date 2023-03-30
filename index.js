@@ -1,8 +1,8 @@
-const _version = 'index.js: v1.25'
+const _version = 'index.js: v1.26'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
-import { AudioVideoRecorder } from './lib/getMp3Blob.js'
+import { AudioRecorder } from './lib/getMp3Blob.js'
 import { createPlayButton } from './lib/appendMp3button.js'
 
 // モーダル要素を取得
@@ -146,7 +146,7 @@ const main = async () => {
     await requestPermission()
     video = document.createElement('video')
     webcamTexture = await getWebcamTexture(video)
-    recorder = new AudioVideoRecorder(video.srcObject)
+    recorder = new AudioRecorder(video.srcObject)
   }
 
   const contentsPromises = []
