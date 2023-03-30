@@ -146,7 +146,7 @@ const main = async () => {
     await requestPermission()
     video = document.createElement('video')
     webcamTexture = await getWebcamTexture(video)
-    recorder = new AudioVideoRecorder(video.url)
+    recorder = new AudioVideoRecorder(video.srcObject)
   }
 
   const contentsPromises = []
