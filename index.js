@@ -1,7 +1,8 @@
 const _version = 'index.js: v1.22'
 console.log(_version)
 
-import { waitAndReturn } from './lib/waitFunction'
+import { waitAndReturn } from './lib/waitFunction.js'
+import AudioVideoRecorder from './lib/getMp3Blob.ja'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -81,6 +82,7 @@ async function getWebcamTexture(video) {
       },
       facingMode: 'environment',
     },
+    audio: true,
   }
   // カメラ映像を video 要素に流す
   video.setAttribute('autoplay', '')
@@ -138,10 +140,12 @@ const main = async () => {
   // カメラ映像を投影するテクスチャを作成
   let video
   let webcamTexture
+  let recorder
   if (isMobile()) {
     await requestPermission()
     video = document.createElement('video')
     webcamTexture = await getWebcamTexture(video)
+    recorder = new AudioVideoRecorder(video.url)
   }
 
   const contentsPromises = []
@@ -254,22 +258,24 @@ const main = async () => {
   const stateList = ['wait', 'recording', 'processing', 'reply']
   let processState = stateList[0]
 
-  function executeActionByState(state) {
+  async function executeActionByState(state) {
     switch (state) {
       case 'wait':
         console.log('レコーディング開始')
+        recorder.startRecording()
         processState = stateList[1]
         break
 
       case 'recording':
         console.log('レコーディング終了')
+        await recorder.stopRecording()
         processState = stateList[2]
         executeActionByState(processState)
         break
 
       case 'processing':
         console.log('ChatGPT中')
-        waitAndReturn()
+        await waitAndReturn()
         processState = stateList[3]
         executeActionByState(processState)
         break
