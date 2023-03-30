@@ -1,8 +1,9 @@
-const _version = 'index.js: v1.23'
+const _version = 'index.js: v1.24'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
 import AudioVideoRecorder from './lib/getMp3Blob.ja'
+import createPlayButton from './lib/appendMp3button.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -268,7 +269,8 @@ const main = async () => {
 
       case 'recording':
         console.log('レコーディング終了')
-        await recorder.stopRecording()
+        const mp3 = await recorder.stopRecording()
+        createPlayButton(mp3)
         processState = stateList[2]
         executeActionByState(processState)
         break
