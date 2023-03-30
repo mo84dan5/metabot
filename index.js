@@ -3,7 +3,7 @@ console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
 import AudioVideoRecorder from './lib/getMp3Blob.js'
-import createPlayButton from './lib/appendMp3button.js'
+import { createPlayButton } from './lib/appendMp3button.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
