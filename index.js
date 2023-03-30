@@ -1,8 +1,8 @@
-const _version = 'index.js: v1.24'
+const _version = 'index.js: v1.25'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
-import {AudioVideoRecorder} from './lib/getMp3Blob.js'
+import { AudioVideoRecorder } from './lib/getMp3Blob.js'
 import { createPlayButton } from './lib/appendMp3button.js'
 
 // モーダル要素を取得
