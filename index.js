@@ -1,4 +1,4 @@
-const _version = 'version: v1.42'
+const _version = 'version: v1.43'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -28,7 +28,7 @@ const closeButton = document.querySelector('.close')
 
 const modalTextElement = document.getElementById('modal-text')
 const baseText =
-  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。また、会話機能を利用する際はOpenAIの API KEY をご用意ください。'
+  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。 \n また、会話機能を利用する際はOpenAIの API KEY をご用意ください。\n'
 modalTextElement.innerHTML = baseText + '\n' + _version
 
 // ページ読み込み時にモーダルを表示
@@ -288,7 +288,7 @@ const main = async () => {
         whisperMessage = await transcribeAudio(mp3Blob, inputApiKey.value)
         console.log('mp3Data: ', mp3Data)
         console.log(whisperMessage)
-        modalTextElement.innerHTML = whisperMessage.text
+        modalTextElement.innerHTML = 'あなた: ' + whisperMessage.text
         modal.style.display = 'block'
         processState = stateList[2]
         executeActionByState(processState)
@@ -308,7 +308,8 @@ const main = async () => {
         console.log('返答取得')
         console.log(chatGptMessage)
         prompt.push(chatGptMessage.choices[0].message)
-        modalTextElement.innerHTML = chatGptMessage.choices[0].message.content
+        modalTextElement.innerHTML =
+          'メタボット: ' + chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
         micButton.style.display = 'block'
         processState = stateList[0]
