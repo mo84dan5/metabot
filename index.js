@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.35'
+const _version = 'index.js: v1.36'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -255,9 +255,9 @@ const main = async () => {
 
   // API keyの取得モーダル
   apiKeyModal.style.display = 'block'
-
+  const micButton = createMicButton()
   // Hammerインスタンスの作成
-  const hammer = new Hammer(document.body)
+  const hammer = new Hammer(micButton)
 
   let timeoutId
   const stateList = ['wait', 'recording', 'processing', 'reply']
@@ -314,10 +314,12 @@ const main = async () => {
 
   hammer.on('press', () => {
     if (processState === 'wait') {
+      micButton.classList.add('pressed')
       executeActionByState(processState)
     }
     timeoutId = setTimeout(() => {
       if (processState === 'recording') {
+        micButton.classList.remove('pressed')
         executeActionByState(processState)
       }
     }, 5000)
@@ -326,10 +328,10 @@ const main = async () => {
   hammer.on('pressup', () => {
     clearTimeout(timeoutId)
     if (processState === 'recording') {
+      micButton.classList.remove('pressed')
       executeActionByState(processState)
     }
   })
-  createMicButton()
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
