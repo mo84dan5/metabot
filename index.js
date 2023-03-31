@@ -1,10 +1,10 @@
 const _version = 'index.js: v1.29'
 console.log(_version)
 
-import { waitAndReturn } from './lib/waitFunction'
-import { AudioRecorder } from './lib/getMp3Blob'
-import { createPlayButton } from './lib/appendMp3button'
-import { transcribeAudio } from './lib/transcribeAudio'
+import { waitAndReturn } from './lib/waitFunction.js'
+import { AudioRecorder } from './lib/getMp3Blob.js'
+import { createPlayButton } from './lib/appendMp3button.js'
+import { transcribeAudio } from './lib/transcribeAudio.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
