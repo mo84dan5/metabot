@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.41'
+const _version = 'version: v1.42'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -28,7 +28,7 @@ const closeButton = document.querySelector('.close')
 
 const modalTextElement = document.getElementById('modal-text')
 const baseText =
-  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。'
+  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。また、会話機能を利用する際はOpenAIの API KEY をご用意ください。'
 modalTextElement.innerHTML = baseText + '\n' + _version
 
 // ページ読み込み時にモーダルを表示
@@ -288,6 +288,8 @@ const main = async () => {
         whisperMessage = await transcribeAudio(mp3Blob, inputApiKey.value)
         console.log('mp3Data: ', mp3Data)
         console.log(whisperMessage)
+        modalTextElement.innerHTML = whisperMessage.text
+        modal.style.display = 'block'
         processState = stateList[2]
         executeActionByState(processState)
         break
