@@ -294,7 +294,7 @@ const main = async () => {
 
       case 'processing':
         processState = stateList[3]
-        prompt.append({
+        prompt.push({
           role: 'user',
           content: whisperMessage.text,
         })
@@ -305,7 +305,7 @@ const main = async () => {
       case 'reply':
         console.log('返答取得')
         console.log(chatGptMessage)
-        prompt.append(chatGptMessage.choices[0].message)
+        prompt.push(chatGptMessage.choices[0].message)
         modalTextElement.innerHTML = chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
         micButton.style.display = 'block'
