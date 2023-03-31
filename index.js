@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.39'
+const _version = 'index.js: v1.40'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -7,6 +7,7 @@ import { createPlayButton } from './lib/appendMp3button.js'
 import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
+import { prompt } from './lib/prompts.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -293,21 +294,18 @@ const main = async () => {
 
       case 'processing':
         processState = stateList[3]
-        chatGptMessage = await chatCompletions(
-          [
-            {
-              role: 'user',
-              content: whisperMessage.text,
-            },
-          ],
-          inputApiKey.value
-        )
+        prompt.append({
+          role: 'user',
+          content: whisperMessage.text,
+        })
+        chatGptMessage = await chatCompletions(prompt, inputApiKey.value)
         executeActionByState(processState)
         break
 
       case 'reply':
         console.log('返答取得')
         console.log(chatGptMessage)
+        prompt.append(chatGptMessage.choices[0].message)
         modalTextElement.innerHTML = chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
         micButton.style.display = 'block'
