@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.38'
+const _version = 'index.js: v1.39'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -280,6 +280,7 @@ const main = async () => {
 
       case 'recording':
         console.log('レコーディング終了')
+        micButton.style.display = 'none'
         const mp3Data = await recorder.stopRecording()
         const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
         // createPlayButton(mp3Blob)
@@ -309,6 +310,7 @@ const main = async () => {
         console.log(chatGptMessage)
         modalTextElement.innerHTML = chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
+        micButton.style.display = 'block'
         processState = stateList[0]
         break
 
