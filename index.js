@@ -1,9 +1,10 @@
 const _version = 'index.js: v1.29'
 console.log(_version)
 
-import { waitAndReturn } from './lib/waitFunction.js'
-import { AudioRecorder } from './lib/getMp3Blob.js'
-import { createPlayButton } from './lib/appendMp3button.js'
+import { waitAndReturn } from './lib/waitFunction'
+import { AudioRecorder } from './lib/getMp3Blob'
+import { createPlayButton } from './lib/appendMp3button'
+import { transcribeAudio } from './lib/transcribeAudio'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -259,7 +260,7 @@ const main = async () => {
   let timeoutId
   const stateList = ['wait', 'recording', 'processing', 'reply']
   let processState = stateList[0]
-
+  let message
   async function executeActionByState(state) {
     switch (state) {
       case 'wait':
@@ -272,14 +273,15 @@ const main = async () => {
         console.log('レコーディング終了')
         const mp3Data = await recorder.stopRecording()
         const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
-        createPlayButton(mp3Blob)
+        // createPlayButton(mp3Blob)
+        message = await transcribeAudio(mp3Blob, inputApiKey.value)
         console.log('mp3Data: ', mp3Data)
         processState = stateList[2]
         executeActionByState(processState)
         break
 
       case 'processing':
-        console.log('ChatGPT中')
+        console.log(message)
         await waitAndReturn()
         processState = stateList[3]
         executeActionByState(processState)
