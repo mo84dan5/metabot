@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.33'
+const _version = 'index.js: v1.34'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -300,7 +300,7 @@ const main = async () => {
       case 'reply':
         console.log('返答取得')
         console.log(chatGptMessage)
-        modalTextElement.innerHTML = chatGptMessage.choices[0].message
+        modalTextElement.innerHTML = chatGptMessage.choices[0].message.assistant
         modal.style.display = 'block'
         processState = stateList[0]
         break
