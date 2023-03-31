@@ -255,7 +255,13 @@ const main = async () => {
 
   // API keyの取得モーダル
   apiKeyModal.style.display = 'block'
+
   const micButton = createMicButton()
+  const micSetPosition = () => {
+    micButton.style.left = `calc(50% - ${micButton.offsetWidth / 2}px)`
+  }
+  window.addEventListener('resize', micSetPosition)
+  micSetPosition()
   // Hammerインスタンスの作成
   const hammer = new Hammer(micButton)
 
