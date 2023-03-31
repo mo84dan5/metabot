@@ -6,6 +6,7 @@ import { AudioRecorder } from './lib/getMp3Blob.js'
 import { createPlayButton } from './lib/appendMp3button.js'
 import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
+import { createMicButton } from './lib/createMicButton.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -328,6 +329,7 @@ const main = async () => {
       executeActionByState(processState)
     }
   })
+  createMicButton()
 
   const clock = new THREE.Clock()
   // 再生開始 (カメラ映像を投影)
