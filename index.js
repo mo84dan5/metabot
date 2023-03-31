@@ -289,7 +289,7 @@ const main = async () => {
 
       case 'reply':
         console.log('返答取得')
-        modalTextElement.innerHTML = 'リプライ文'
+        modalTextElement.innerHTML = message
         modal.style.display = 'block'
         processState = stateList[0]
         break
