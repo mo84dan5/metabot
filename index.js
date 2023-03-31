@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.40'
+const _version = 'index.js: v1.41'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
