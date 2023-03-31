@@ -28,7 +28,7 @@ const closeButton = document.querySelector('.close')
 
 const modalTextElement = document.getElementById('modal-text')
 const baseText =
-  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。 \n また、会話機能を利用する際はOpenAIの API KEY をご用意ください。\n'
+  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。会話機能を利用する際はOpenAIの API KEY をご用意ください。'
 modalTextElement.innerHTML = baseText + '\n' + _version
 
 // ページ読み込み時にモーダルを表示
