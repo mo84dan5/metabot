@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.30'
+const _version = 'index.js: v1.31'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -261,7 +261,7 @@ const main = async () => {
   let timeoutId
   const stateList = ['wait', 'recording', 'processing', 'reply']
   let processState = stateList[0]
-  let message
+  let whisperMessage
   let chatGptMessage
   async function executeActionByState(state) {
     switch (state) {
@@ -276,8 +276,9 @@ const main = async () => {
         const mp3Data = await recorder.stopRecording()
         const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
         // createPlayButton(mp3Blob)
-        message = await transcribeAudio(mp3Blob, inputApiKey.value)
+        whisperMessage = await transcribeAudio(mp3Blob, inputApiKey.value)
         console.log('mp3Data: ', mp3Data)
+        console.log(whisperMessage)
         processState = stateList[2]
         executeActionByState(processState)
         break
@@ -288,7 +289,7 @@ const main = async () => {
           [
             {
               role: 'user',
-              content: message.text,
+              content: whisperMessage.text,
             },
           ],
           inputApiKey.value
@@ -298,7 +299,8 @@ const main = async () => {
 
       case 'reply':
         console.log('返答取得')
-        modalTextElement.innerHTML = chatGptMessage.data.choices[0].message
+        console.log(chatGptMessage)
+        modalTextElement.innerHTML = chatGptMessage
         modal.style.display = 'block'
         processState = stateList[0]
         break
