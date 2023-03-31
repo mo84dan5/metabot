@@ -147,7 +147,7 @@ const main = async () => {
   if (isMobile()) {
     await requestPermission()
     video = document.createElement('video')
-    // video.muted = true
+    video.muted = true
     webcamTexture = await getWebcamTexture(video)
     recorder = new AudioRecorder(video.srcObject)
   }
