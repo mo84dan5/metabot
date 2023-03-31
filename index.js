@@ -5,6 +5,7 @@ import { waitAndReturn } from './lib/waitFunction.js'
 import { AudioRecorder } from './lib/getMp3Blob.js'
 import { createPlayButton } from './lib/appendMp3button.js'
 import { transcribeAudio } from './lib/transcribeAudio.js'
+import { chatCompletions } from './lib/chatCompletions.js'
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -261,6 +262,7 @@ const main = async () => {
   const stateList = ['wait', 'recording', 'processing', 'reply']
   let processState = stateList[0]
   let message
+  let chatGptMessage
   async function executeActionByState(state) {
     switch (state) {
       case 'wait':
@@ -281,15 +283,22 @@ const main = async () => {
         break
 
       case 'processing':
-        console.log(message)
-        await waitAndReturn()
         processState = stateList[3]
+        chatGptMessage = await chatCompletions(
+          [
+            {
+              role: 'user',
+              content: message.text,
+            },
+          ],
+          inputApiKey.value
+        )
         executeActionByState(processState)
         break
 
       case 'reply':
         console.log('返答取得')
-        modalTextElement.innerHTML = message.text
+        modalTextElement.innerHTML = chatGptMessage.data.choices[0].message
         modal.style.display = 'block'
         processState = stateList[0]
         break
