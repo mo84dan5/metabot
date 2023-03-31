@@ -1,4 +1,4 @@
-const _version = 'index.js: v1.29'
+const _version = 'index.js: v1.30'
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -289,7 +289,7 @@ const main = async () => {
 
       case 'reply':
         console.log('返答取得')
-        modalTextElement.innerHTML = message
+        modalTextElement.innerHTML = message.text
         modal.style.display = 'block'
         processState = stateList[0]
         break
