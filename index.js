@@ -300,7 +300,7 @@ const main = async () => {
       case 'reply':
         console.log('返答取得')
         console.log(chatGptMessage)
-        modalTextElement.innerHTML = chatGptMessage.choices[0].message.assistant
+        modalTextElement.innerHTML = chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
         processState = stateList[0]
         break
