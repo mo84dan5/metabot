@@ -1,4 +1,4 @@
-const _version = 'version: v1.47'
+const _version = 'version: v1.48'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -8,6 +8,7 @@ import { createPlayButton } from './lib/appendMp3button.js'
 import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
+import { textToSpeech } from './lib/textToSpeech.js'
 import { promptJapanese, promptEnglish } from './lib/prompts.js'
 let lang = searchParams.get('lang') || 'ja'
 let prompt
@@ -324,6 +325,17 @@ const main = async () => {
         prompt.push(chatGptMessage.choices[0].message)
         modalTextElement.innerHTML =
           'METABOT: ' + chatGptMessage.choices[0].message.content
+        textToSpeech(inputApiKey.value, chatGptMessage.choices[0].message.content, 'onyx')
+          .then((mp3Url) => {
+            if (mp3Url) {
+              // Audioオブジェクトを作成し、音声を再生
+              const audio = new Audio(mp3Url)
+              audio.play()
+            } else {
+              console.error('Failed to get speech URL')
+            }
+          })
+          .catch((error) => console.error(error))
         modal.style.display = 'block'
         micButton.style.display = 'block'
         processState = stateList[0]
