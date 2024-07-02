@@ -1,4 +1,5 @@
-const _version = 'version: v1.43'
+const _version = 'version: v1.45'
+const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
 import { waitAndReturn } from './lib/waitFunction.js'
@@ -7,7 +8,14 @@ import { createPlayButton } from './lib/appendMp3button.js'
 import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
-import { prompt } from './lib/prompts.js'
+import { promptJapanese, promptEnglish } from './lib/prompts.js'
+const lang = searchParams.get('lang')
+let prompt
+if (lang !== null || lang === 'ja') {
+  prompt = promptJapanese
+}else if(lang === 'en'){
+  prompt = promptEnglish
+}
 
 // モーダル要素を取得
 const modal = document.getElementById('myModal')
@@ -255,10 +263,7 @@ const main = async () => {
   setLight(model.scene, 10)
 
   // API keyの取得モーダル
-  const searchParams = new URLSearchParams(window.location.search);
-
-  // 'yourKey' というキーの値を取得します
-  const apiKey = searchParams.get('key');
+  const apiKey = searchParams.get('key')
 
   if (apiKey !== null) {
     inputApiKey.value = "sk-" + apiKey
@@ -297,7 +302,7 @@ const main = async () => {
         whisperMessage = await transcribeAudio(mp3Blob, inputApiKey.value)
         console.log('mp3Data: ', mp3Data)
         console.log(whisperMessage)
-        modalTextElement.innerHTML = 'あなた: ' + whisperMessage.text
+        modalTextElement.innerHTML = 'YOU: ' + whisperMessage.text
         modal.style.display = 'block'
         processState = stateList[2]
         executeActionByState(processState)
