@@ -1,4 +1,4 @@
-const _version = 'version: v1.46'
+const _version = 'version: v1.47'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -9,9 +9,9 @@ import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
 import { promptJapanese, promptEnglish } from './lib/prompts.js'
-const lang = searchParams.get('lang')
+let lang = searchParams.get('lang') || 'ja'
 let prompt
-if (lang === null || lang === 'ja') {
+if (lang === 'ja') {
   prompt = promptJapanese
 }else if(lang === 'en'){
   prompt = promptEnglish
