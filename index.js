@@ -11,7 +11,7 @@ import { createMicButton } from './lib/createMicButton.js'
 import { promptJapanese, promptEnglish } from './lib/prompts.js'
 const lang = searchParams.get('lang')
 let prompt
-if (lang !== null || lang === 'ja') {
+if (lang === null || lang === 'ja') {
   prompt = promptJapanese
 }else if(lang === 'en'){
   prompt = promptEnglish
