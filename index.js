@@ -1,4 +1,4 @@
-const _version = 'version: v1.48'
+const _version = 'version: v1.49'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -360,11 +360,11 @@ const main = async () => {
     }, 5000)
   })
 
-  hammer.on('pressup', () => {
+  hammer.on('pressup', async () => {
     clearTimeout(timeoutId)
     if (processState === 'recording') {
       micButton.classList.remove('pressed')
-      executeActionByState(processState)
+      await executeActionByState(processState)
     }
   })
 
