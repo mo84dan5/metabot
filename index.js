@@ -1,4 +1,4 @@
-const _version = 'version: v1.49'
+const _version = 'version: v1.50'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -305,21 +305,21 @@ const main = async () => {
         console.log(whisperMessage)
         modalTextElement.innerHTML = 'YOU: ' + whisperMessage.text
         modal.style.display = 'block'
-        processState = stateList[2]
-        executeActionByState(processState)
-        break
-
-      case 'processing':
-        processState = stateList[3]
+      //   processState = stateList[2]
+      //   executeActionByState(processState)
+      //   break
+      //
+      // case 'processing':
+      //   processState = stateList[3]
         prompt.push({
           role: 'user',
           content: whisperMessage.text,
         })
         chatGptMessage = await chatCompletions(prompt, inputApiKey.value)
-        executeActionByState(processState)
-        break
-
-      case 'reply':
+      //   executeActionByState(processState)
+      //   break
+      //
+      // case 'reply':
         console.log('返答取得')
         console.log(chatGptMessage)
         prompt.push(chatGptMessage.choices[0].message)
