@@ -255,7 +255,16 @@ const main = async () => {
   setLight(model.scene, 10)
 
   // API keyの取得モーダル
-  apiKeyModal.style.display = 'block'
+  const searchParams = new URLSearchParams(window.location.search);
+
+  // 'yourKey' というキーの値を取得します
+  const apiKey = searchParams.get('key');
+
+  if (apiKey !== null) {
+    inputApiKey.value = "sk-" + apiKey
+  } else {
+    apiKeyModal.style.display = 'block'
+  }
 
   const micButton = createMicButton()
   const micSetPosition = () => {
@@ -309,7 +318,7 @@ const main = async () => {
         console.log(chatGptMessage)
         prompt.push(chatGptMessage.choices[0].message)
         modalTextElement.innerHTML =
-          'メタボット: ' + chatGptMessage.choices[0].message.content
+          'METABOT: ' + chatGptMessage.choices[0].message.content
         modal.style.display = 'block'
         micButton.style.display = 'block'
         processState = stateList[0]
