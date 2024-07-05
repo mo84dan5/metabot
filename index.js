@@ -350,7 +350,7 @@ const main = async () => {
     }
   }
 
-  hammer.on('pressup', () => {
+  hammer.on('tap', () => {
     if (processState === 'wait') {
       micButton.classList.add('pressed')
       executeActionByState(processState)
@@ -363,7 +363,7 @@ const main = async () => {
     }, 5000)
   })
 
-  hammer.on('press', async () => {
+  hammer.on('tap', async () => {
     clearTimeout(timeoutId)
     if (processState === 'recording') {
       micButton.classList.remove('pressed')
