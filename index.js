@@ -1,4 +1,4 @@
-const _version = 'version: v1.50'
+const _version = 'version: v1.51 develop'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -9,6 +9,7 @@ import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
 import { textToSpeech } from './lib/textToSpeech.js'
+import { SoundPlayer } from './lib/webAudioApiSoundSystem2.js'
 import { promptJapanese, promptEnglish } from './lib/prompts.js'
 let lang = searchParams.get('lang') || 'ja'
 let prompt
@@ -296,6 +297,7 @@ const main = async () => {
 
       case 'recording':
         console.log('レコーディング終了')
+        let player = new SoundPlayer()
         micButton.style.display = 'none'
         const mp3Data = await recorder.stopRecording()
         const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
@@ -329,8 +331,9 @@ const main = async () => {
           .then((mp3Url) => {
             if (mp3Url) {
               // Audioオブジェクトを作成し、音声を再生
-              const audio = new Audio(mp3Url)
-              audio.play()
+              // const audio = new Audio(mp3Url)
+              // audio.play()
+              player.loadAndPlaySound(mp3Url)
             } else {
               console.error('Failed to get speech URL')
             }
