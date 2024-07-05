@@ -1,4 +1,4 @@
-const _version = 'version: v1.58'
+const _version = 'version: v1.59'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -296,6 +296,7 @@ const main = async () => {
         break
 
       case 'recording':
+        processState = stateList[2]
         console.log('レコーディング終了')
         let player = new SoundPlayer()
         micButton.style.display = 'none'
