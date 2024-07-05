@@ -1,4 +1,4 @@
-const _version = 'version: v1.54 develop'
+const _version = 'version: v1.55 develop'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -350,11 +350,12 @@ const main = async () => {
     }
   }
 
-  hammer.on('tap', () => {
+  micButton.addEventListener('mousedown', () => {
     if (processState === 'wait') {
       micButton.classList.add('pressed')
       executeActionByState(processState)
     }
+
     timeoutId = setTimeout(() => {
       if (processState === 'recording') {
         micButton.classList.remove('pressed')
@@ -363,7 +364,7 @@ const main = async () => {
     }, 5000)
   })
 
-  hammer.on('tap', async () => {
+  micButton.addEventListener('mouseup', async () => {
     clearTimeout(timeoutId)
     if (processState === 'recording') {
       micButton.classList.remove('pressed')
