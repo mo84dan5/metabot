@@ -1,4 +1,4 @@
-const _version = 'version: v1.55 develop'
+const _version = 'version: v1.56 develop'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -349,27 +349,35 @@ const main = async () => {
         break
     }
   }
+  let allowMouseUp = false;
 
   micButton.addEventListener('mousedown', () => {
     if (processState === 'wait') {
-      micButton.classList.add('pressed')
+      this.classList.add('pressed')
       executeActionByState(processState)
     }
-
-    timeoutId = setTimeout(() => {
+    setTimeout(async () => {
       if (processState === 'recording') {
         micButton.classList.remove('pressed')
-        executeActionByState(processState)
+        await executeActionByState(processState)
+        allowMouseUp = false
       }
     }, 5000)
+    setTimeout(() => {
+      allowMouseUp = true
+    }, 1000)
   })
 
   micButton.addEventListener('mouseup', async () => {
+    if (!allowMouseUp) {
+      return
+    }
     clearTimeout(timeoutId)
     if (processState === 'recording') {
-      micButton.classList.remove('pressed')
+      this.classList.remove('pressed')
       await executeActionByState(processState)
     }
+    allowMouseUp = false
   })
 
   const clock = new THREE.Clock()
