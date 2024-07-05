@@ -1,4 +1,4 @@
-const _version = 'version: v1.53 develop'
+const _version = 'version: v1.54 develop'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -9,7 +9,7 @@ import { transcribeAudio } from './lib/transcribeAudio.js'
 import { chatCompletions } from './lib/chatCompletions.js'
 import { createMicButton } from './lib/createMicButton.js'
 import { textToSpeech } from './lib/textToSpeech.js'
-import { SoundPlayer } from './lib/webAudioApiSoundSystem2.js'
+import { SoundPlayer } from './lib/soundPlayer.js'
 import { promptJapanese, promptEnglish } from './lib/prompts.js'
 let lang = searchParams.get('lang') || 'ja'
 let prompt
@@ -350,7 +350,7 @@ const main = async () => {
     }
   }
 
-  hammer.on('press', () => {
+  hammer.on('pressup', () => {
     if (processState === 'wait') {
       micButton.classList.add('pressed')
       executeActionByState(processState)
@@ -363,7 +363,7 @@ const main = async () => {
     }, 5000)
   })
 
-  hammer.on('pressup', async () => {
+  hammer.on('press', async () => {
     clearTimeout(timeoutId)
     if (processState === 'recording') {
       micButton.classList.remove('pressed')
