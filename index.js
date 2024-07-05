@@ -1,4 +1,4 @@
-const _version = 'version: v1.56 develop'
+const _version = 'version: v1.57develop'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -353,7 +353,7 @@ const main = async () => {
 
   micButton.addEventListener('mousedown', () => {
     if (processState === 'wait') {
-      this.classList.add('pressed')
+      micButton.classList.add('pressed')
       executeActionByState(processState)
     }
     setTimeout(async () => {
@@ -374,7 +374,7 @@ const main = async () => {
     }
     clearTimeout(timeoutId)
     if (processState === 'recording') {
-      this.classList.remove('pressed')
+      micButton.classList.remove('pressed')
       await executeActionByState(processState)
     }
     allowMouseUp = false
