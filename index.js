@@ -279,8 +279,6 @@ const main = async () => {
   }
   window.addEventListener('resize', micSetPosition)
   micSetPosition()
-  // Hammerインスタンスの作成
-  const hammer = new Hammer(micButton)
 
   let timeoutId
   const stateList = ['wait', 'recording', 'processing', 'reply']
