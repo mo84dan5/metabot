@@ -1,4 +1,4 @@
-const _version = 'version: v1.61'
+const _version = 'version: v1.62 ※音量注意'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
