@@ -1,4 +1,4 @@
-const _version = 'version: v1.62 ※音量注意'
+const _version = 'version: v1.63 ※音量注意'
 const searchParams = new URLSearchParams(window.location.search)
 console.log(_version)
 
@@ -38,7 +38,7 @@ const closeButton = document.querySelector('.close')
 
 const modalTextElement = document.getElementById('modal-text')
 const baseText =
-  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。会話機能を利用する際はOpenAIの API KEY をご用意ください。'
+  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。'
 modalTextElement.innerHTML = baseText + '\n' + _version
 
 // ページ読み込み時にモーダルを表示
