@@ -1,394 +1,149 @@
-const _version = 'version: v1.63 ※音量注意'
-const searchParams = new URLSearchParams(window.location.search)
-console.log(_version)
+import { config, getVersion } from './lib/config.js';
+import { Modal, ApiKeyModal } from './lib/uiComponents.js';
+import { AudioRecorder } from './lib/audioManager.js';
+import { ARScene } from './lib/arScene.js';
+import { ConversationManager } from './lib/conversationManager.js';
+import { createMicButton } from './lib/createMicButton.js';
+import { promptJapanese, promptEnglish } from './lib/prompts.js';
+import { 
+  isMobile, 
+  requestDevicePermissions, 
+  getWebcamStream, 
+  loadGLTFModel,
+  getUrlParams,
+  getLanguage,
+  getApiKey
+} from './lib/utils.js';
 
-import { waitAndReturn } from './lib/waitFunction.js'
-import { AudioRecorder } from './lib/getMp3Blob.js'
-import { createPlayButton } from './lib/appendMp3button.js'
-import { transcribeAudio } from './lib/transcribeAudio.js'
-import { chatCompletions } from './lib/chatCompletions.js'
-import { createMicButton } from './lib/createMicButton.js'
-import { textToSpeech } from './lib/textToSpeech.js'
-import { SoundPlayer } from './lib/soundPlayer.js'
-import { promptJapanese, promptEnglish } from './lib/prompts.js'
-let lang = searchParams.get('lang') || 'ja'
-let prompt
-if (lang === 'ja') {
-  prompt = promptJapanese
-}else if(lang === 'en'){
-  prompt = promptEnglish
-}
+console.log(getVersion());
 
-// モーダル要素を取得
-const modal = document.getElementById('myModal')
-
-// OKボタン要素を取得
-const okButton = document.querySelector('.ok')
-
-// モーダル要素を取得
-const apiKeyModal = document.getElementById('apiModal')
-
-// submitボタン要素を取得
-const apiKeySubmitButton = document.querySelector('.submit')
-
-const inputApiKey = document.getElementById('inputApiKey')
-
-// 閉じるボタン要素を取得
-const closeButton = document.querySelector('.close')
-
-const modalTextElement = document.getElementById('modal-text')
-const baseText =
-  'このアプリケーションはカメラと音声、動作と方向等へのアクセス許可が必要です。'
-modalTextElement.innerHTML = baseText + '\n' + _version
-
-// ページ読み込み時にモーダルを表示
-
-modal.style.display = 'block'
-
-// OKボタンがクリックされたときの処理
-let okButtonOnce = true
-okButton.onclick = function () {
-  modal.style.display = 'none'
-  if (okButtonOnce) {
-    okButtonOnce = false
-    main().catch((e) => {
-      console.log(e)
-      modalTextElement.innerHTML = e
-      modal.style.display = 'block'
-    })
-  } else {
-    modal.style.display = 'none'
-  }
-}
-
-// OKボタンがクリックされたときの処理
-apiKeySubmitButton.onclick = function () {
-  apiKeyModal.style.display = 'none'
-}
-
-// 閉じるボタンがクリックされたときの処理
-closeButton.onclick = function () {
-  modal.style.display = 'none'
-}
-
-async function requestPermission() {
-  // デバイスのジャイロセンサー(モーションと画面の向き)へのアクセス許可確認
-  // iOS だけ DeviceMotionEvent も許可を得る必要がある
-  if (
-    typeof DeviceMotionEvent !== 'undefined' &&
-    typeof DeviceMotionEvent.requestPermission === 'function'
-  ) {
-    await DeviceOrientationEvent.requestPermission()
-  }
-}
-
-async function getWebcamTexture(video) {
-  const videoConstraints = {
-    video: {
-      width: {
-        min: 1280,
-        ideal: 1920,
-        max: 2560,
-      },
-      height: {
-        min: 720,
-        ideal: 1080,
-        max: 1440,
-      },
-      facingMode: 'environment',
-    },
-    audio: true,
-  }
-  // カメラ映像を video 要素に流す
-  video.setAttribute('autoplay', '')
-  video.setAttribute('playsinline', '')
-  video.srcObject = await navigator.mediaDevices.getUserMedia(videoConstraints)
-  await new Promise((resolve, reject) => {
-    video.onloadedmetadata = () => {
-      video.play()
-      resolve()
-    }
-  })
-  // カメラ映像をThreeJSのテクスチャとして取得する
-  const webcam_texture = new THREE.VideoTexture(video)
-  webcam_texture.magFilter = THREE.LinearFilter
-  webcam_texture.minFilter = THREE.LinearFilter
-  webcam_texture.format = THREE.RGBFormat
-
-  return webcam_texture
-}
-
-// プロミスを返すGLTFLoader関数
-function loadGLTFModel(url) {
-  // GLTFLoaderオブジェクトを作成
-  const loader = new THREE.GLTFLoader()
-
-  // Promiseを使用してモデルを読み込む
-  return new Promise((resolve, reject) => {
-    loader.load(
-      url,
-      (gltf) => resolve(gltf), // ロード成功時の処理
-      undefined, // 進捗イベント用のコールバックは使用しない
-      (error) => reject(error) // ロード失敗時の処理
-    )
-  })
-}
-
-const isMobile = () => {
-  // ユーザーエージェントを取得
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera
-
-  // モバイルデバイスかどうかを判定
-  var isMobile = /Mobi|Android/i.test(userAgent)
-
-  if (isMobile) {
-    // モバイルデバイスからアクセスしている場合の処理
-    return true
-  } else {
-    // PCからアクセスしている場合の処理
-    return false
-  }
-}
-
-const main = async () => {
-  console.log('start app')
-  // カメラ映像を投影するテクスチャを作成
-  let video
-  let webcamTexture
-  let recorder
-  if (isMobile()) {
-    await requestPermission()
-    video = document.createElement('video')
-    video.muted = true
-    webcamTexture = await getWebcamTexture(video)
-    recorder = new AudioRecorder(video.srcObject)
+class MetabotApp {
+  constructor() {
+    this.urlParams = getUrlParams();
+    this.language = getLanguage(this.urlParams);
+    this.prompt = this.language === 'ja' ? promptJapanese : promptEnglish;
+    
+    this.modals = {};
+    this.apiKey = null;
+    this.arScene = null;
+    this.conversationManager = null;
+    
+    this.init();
   }
 
-  const contentsPromises = []
-  const modelPromise = loadGLTFModel('./assets/sample3.glb')
-  contentsPromises.push(modelPromise)
-  Promise.all(contentsPromises)
-  const model = await modelPromise
-
-  // alias
-  const [w, h] = [window.innerWidth, window.innerHeight]
-
-  // ThreeJSのシーンを作成
-  const scene = new THREE.Scene()
-  if (webcamTexture) {
-    // シーンの背景にカメラの動画テクスチャを貼り付ける
-    scene.background = webcamTexture
-  }
-  const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000)
-  camera.position.set(0, 3, 2)
-  scene.add(camera)
-  const light = new THREE.HemisphereLight()
-  scene.add(light)
-
-  //  ThreeJSのレンダラーを作成
-  const renderer = new THREE.WebGLRenderer({
-    preserveDrawingBuffer: true,
-    antialias: true,
-  })
-  renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.setSize(w, h)
-  // レンダラーのdomElementにスタイルを適用
-  renderer.domElement.style.position = 'absolute'
-  renderer.domElement.style.top = 0
-  renderer.domElement.style.left = 0
-
-  // <body>にスタイルを適用
-  document.body.style.margin = 0
-  document.body.style.overflow = 'hidden'
-
-  window.addEventListener('resize', () => {
-    // ウィンドウサイズが変更されたときにレンダラーのサイズを更新
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-  })
-
-  // カメラのコントロールをジャイロセンターから取得した値と連携: THREE.DeviceOrientationControls
-  let controls
-  if (isMobile()) {
-    controls = new THREE.DeviceOrientationControls(camera, true)
-    controls.connect()
-  } else {
-    controls = new THREE.OrbitControls(camera, renderer.domElement)
+  init() {
+    this.setupModals();
+    this.setupApiKey();
+    this.showInitialModal();
   }
 
-  document.body.appendChild(renderer.domElement)
+  setupModals() {
+    this.modals.main = new Modal({
+      id: 'myModal',
+      content: `${config.ui.modal.baseText}\n${getVersion()}`,
+      showCloseButton: true,
+      showOkButton: true,
+      onOk: () => this.onMainModalOk()
+    });
+    this.modals.main.appendTo(document.body);
 
-  // gltfモデルをsceneに追加
-  console.log(model)
-  model.scene.scale.set(3, 3, 3)
-  model.scene.traverse((object) => {
-    object.frustumCulled = false
-  })
-  const mixer = new THREE.AnimationMixer(model.scene)
-  const action = mixer.clipAction(model.animations[0])
-  action.play()
-  scene.add(model.scene)
-
-  const pointLight = new THREE.PointLight(0xffffff, 1, 10)
-  pointLight.position.set(0, 3, 2)
-  scene.add(pointLight)
-  const setLight = (object, distance) => {
-    function generateCombinations(a, b, c, d) {
-      const operations = [(x) => x + d, (x) => x - d, (x) => x]
-      const combinations = []
-
-      operations.forEach((operationA) => {
-        operations.forEach((operationB) => {
-          operations.forEach((operationC) => {
-            combinations.push([operationA(a), operationB(b), operationC(c)])
-          })
-        })
-      })
-
-      return combinations
-    }
-
-    const a = object.position.x
-    const b = object.position.y
-    const c = object.position.z
-    const d = distance
-
-    const positionList = generateCombinations(a, b, c, d)
-
-    positionList.forEach((pos) => {
-      const pointLight = new THREE.PointLight(0xffffff, 1, 10)
-      pointLight.position.set(...pos)
-      scene.add(pointLight)
-    })
-  }
-  setLight(model.scene, 10)
-
-  // API keyの取得モーダル
-  const apiKey = searchParams.get('key')
-
-  if (apiKey !== null) {
-    inputApiKey.value = "sk-" + apiKey
-  } else {
-    apiKeyModal.style.display = 'block'
-  }
-
-  const micButton = createMicButton()
-  const micSetPosition = () => {
-    micButton.style.left = `calc(50% - ${micButton.offsetWidth / 2}px)`
-  }
-  window.addEventListener('resize', micSetPosition)
-  micSetPosition()
-
-  let timeoutId
-  const stateList = ['wait', 'recording', 'processing', 'reply']
-  let processState = stateList[0]
-  let whisperMessage
-  let chatGptMessage
-  async function executeActionByState(state) {
-    switch (state) {
-      case 'wait':
-        console.log('レコーディング開始')
-        recorder.startRecording()
-        processState = stateList[1]
-        break
-
-      case 'recording':
-        processState = stateList[2]
-        console.log('レコーディング終了')
-        let player = new SoundPlayer()
-        micButton.style.display = 'none'
-        const mp3Data = await recorder.stopRecording()
-        const mp3Blob = new Blob([mp3Data], { type: 'audio/mpeg' })
-        // createPlayButton(mp3Blob)
-        whisperMessage = await transcribeAudio(mp3Blob, inputApiKey.value)
-        console.log('mp3Data: ', mp3Data)
-        console.log(whisperMessage)
-        modalTextElement.innerHTML = 'YOU: ' + whisperMessage.text
-        modal.style.display = 'block'
-      //   processState = stateList[2]
-      //   executeActionByState(processState)
-      //   break
-      //
-      // case 'processing':
-      //   processState = stateList[3]
-        prompt.push({
-          role: 'user',
-          content: whisperMessage.text,
-        })
-        chatGptMessage = await chatCompletions(prompt, inputApiKey.value)
-      //   executeActionByState(processState)
-      //   break
-      //
-      // case 'reply':
-        console.log('返答取得')
-        console.log(chatGptMessage)
-        prompt.push(chatGptMessage.choices[0].message)
-        modalTextElement.innerHTML =
-          'METABOT: ' + chatGptMessage.choices[0].message.content
-        textToSpeech(inputApiKey.value, chatGptMessage.choices[0].message.content, 'onyx')
-          .then((mp3Url) => {
-            if (mp3Url) {
-              // Audioオブジェクトを作成し、音声を再生
-              // const audio = new Audio(mp3Url)
-              // audio.play()
-              player.loadAndPlaySound(mp3Url)
-            } else {
-              console.error('Failed to get speech URL')
-            }
-          })
-          .catch((error) => console.error(error))
-        modal.style.display = 'block'
-        micButton.style.display = 'block'
-        processState = stateList[0]
-        break
-
-      default:
-        console.log('未定義の状態です')
-        break
-    }
-  }
-  let allowRecordEnd = false;
-
-  micButton.addEventListener('mouseup', () => {
-    if (processState === 'wait') {
-      micButton.classList.add('pressed')
-      executeActionByState(processState)
-    }
-    setTimeout(async () => {
-      if (processState === 'recording') {
-        micButton.classList.remove('pressed')
-        await executeActionByState(processState)
-        allowRecordEnd = false
+    this.modals.apiKey = new ApiKeyModal({
+      onSubmit: (value) => {
+        this.apiKey = value;
       }
-    }, 5000)
-    setTimeout(() => {
-      allowRecordEnd = true
-    }, 1000)
-  })
-
-  micButton.addEventListener('mouseup', async () => {
-    if (!allowRecordEnd) {
-      return
-    }
-    clearTimeout(timeoutId)
-    if (processState === 'recording') {
-      micButton.classList.remove('pressed')
-      await executeActionByState(processState)
-    }
-    allowRecordEnd = false
-  })
-
-  const clock = new THREE.Clock()
-  // 再生開始 (カメラ映像を投影)
-  function loop() {
-    requestAnimationFrame(loop)
-    if (mixer) {
-      const delta = clock.getDelta()
-      mixer.update(delta)
-    }
-    controls.update()
-    renderer.render(scene, camera)
+    });
+    this.modals.apiKey.appendTo(document.body);
   }
-  loop()
+
+  setupApiKey() {
+    const urlApiKey = getApiKey(this.urlParams);
+    if (urlApiKey) {
+      this.apiKey = urlApiKey;
+      this.modals.apiKey.setValue(urlApiKey);
+    } else {
+      this.modals.apiKey.show();
+    }
+  }
+
+  showInitialModal() {
+    this.modals.main.show();
+  }
+
+  async onMainModalOk() {
+    try {
+      await this.startApp();
+    } catch (error) {
+      console.error('Error starting app:', error);
+      this.modals.main.setContent(error.message);
+      this.modals.main.show();
+    }
+  }
+
+  async startApp() {
+    console.log('Starting app...');
+    
+    const mobile = isMobile();
+    let video = null;
+    let webcamTexture = null;
+    let recorder = null;
+
+    if (mobile) {
+      await requestDevicePermissions();
+      video = await this.setupCamera();
+      recorder = new AudioRecorder(video.srcObject);
+    }
+
+    const model = await loadGLTFModel(config.model.path);
+
+    this.arScene = new ARScene({
+      video: video,
+      model: model,
+      isMobile: mobile
+    });
+
+    const micButton = createMicButton();
+    this.setupMicButtonPosition(micButton);
+
+    this.conversationManager = new ConversationManager({
+      apiKey: this.apiKey || this.modals.apiKey.getValue(),
+      prompt: [...this.prompt],
+      recorder: recorder,
+      modal: this.modals.main,
+      micButton: micButton
+    });
+
+    this.conversationManager.setupMicButtonHandlers();
+    
+    this.arScene.animate();
+  }
+
+  async setupCamera() {
+    const video = document.createElement('video');
+    video.setAttribute('autoplay', '');
+    video.setAttribute('playsinline', '');
+    video.muted = true;
+    
+    const stream = await getWebcamStream(config.camera);
+    video.srcObject = stream;
+    
+    await new Promise((resolve) => {
+      video.onloadedmetadata = () => {
+        video.play();
+        resolve();
+      };
+    });
+    
+    return video;
+  }
+
+  setupMicButtonPosition(micButton) {
+    const setPosition = () => {
+      micButton.style.left = `calc(50% - ${micButton.offsetWidth / 2}px)`;
+    };
+    
+    window.addEventListener('resize', setPosition);
+    setPosition();
+  }
 }
+
+const app = new MetabotApp();
